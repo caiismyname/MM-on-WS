@@ -55,23 +55,30 @@ function handleAuthClick(event) {
 function makeApiCall(){
 	gapi.client.load('calendar', 'v3').then(function(){
 		var minTime = moment().format();
-		var request = gapi.client.calendar.events.list({
-			'calendarId':'davidcai2012@gmail.com',
-			'singleEvents': true,
-			'orderBy': 'startTime',
-			'timeMin': minTime,
-			'maxResults': 10});
-		request.execute(function(resp){
+		var calListRequest = gapi.client.calendar.calendarList.list();
+		calListRequest.execute(function(resp){
 			for (i = 0; i <= resp.items.length ;i++){
-				var item = resp.items[i];
-				var name = item.summary;
-				var start = item.start.dateTime;
-				$("#calendar").append(name, start, '<br>');
+				var calendarInstance = resp.items[i];
+				var calEventRequest = gapi.client.calendar.events.list({
+					'calendarId': calendarInstance.id,
+					'singleEvents': true,
+					'orderBy': 'startTime',
+					'timeMin': minTime,
+					'maxResults': 10});
+				calEventRequest.execute(function(events){
+					for (x = 0; x < events.items.length; x++){
+						var item = events.items[x];
+						var name = item.summary;
+						var start = item.dateTime;
+						$("#calendar").append(name, start, '<br>');
+						};
+					});
 			};
 		});
-		alert("woo");
 	});
-}
+	alert("woo");
+};
+
 
 $(document).ready(function(){
 	updateMoment();
@@ -80,13 +87,7 @@ $(document).ready(function(){
 	updateWeather();
 	setInterval(updateWeather, 600000);
 
-
-
 	handleClientLoad();
-
-
-
-
 
 })
 
