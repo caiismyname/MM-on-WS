@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Magic Mirror</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="Magic_mirror_JQ_WS.js"></script> 
+<script src="moment.js"></script>
+<script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+<link rel="stylesheet" type="text/css" href="Magic_Mirror_css_WS.css">
+</head>
+
+
+
+<body>
+<div id="top-container" class="horizontal-container">
+	<div id="clock" class="info-element">
+			<p id="time"></p>
+			<p id="date"></p>
+	</div>
+
+	<div id="weather" class="info-element">
+	</div>
+</div>
+
+
+
+<div id="bottom-container" class="horizontal-container">
+	<div id="calendar" class="info-element">
+		calendar
+		<button id="authorize-button" onclick="handleAuthClick()" style="visibility:hidden">Authorize</button>
+		<br>
+
+	</div>
+
+</div>
+
+</body>
+</html>
