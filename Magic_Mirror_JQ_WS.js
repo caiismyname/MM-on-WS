@@ -54,6 +54,7 @@ function handleAuthClick(event) {
 
 function makeApiCall(){
 	gapi.client.load('calendar', 'v3').then(function(){
+		var eventList = [];
 		var minTime = moment().format();
 		var calListRequest = gapi.client.calendar.calendarList.list();
 		calListRequest.execute(function(resp){
@@ -70,9 +71,13 @@ function makeApiCall(){
 						var item = events.items[x];
 						var name = item.summary;
 						var start = item.dateTime;
-						$("#calendar").append(name, start, '<br>');
+						eventList.push(name);
 						};
-					});
+					for (y = 0; y < eventList.length ; y++){
+						$("#calendar").append(eventList[y]);
+						};
+	
+				});
 			};
 		});
 	});
