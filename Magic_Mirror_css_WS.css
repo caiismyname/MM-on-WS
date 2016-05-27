@@ -11,6 +11,7 @@ body {
 	height: 20vh;
 	margin: 0px;
 	position: fixed;
+	overflow: auto;
 }
 
 .info-element{
@@ -32,8 +33,13 @@ body {
 
 #calendar{
 	float: left;
+	overflow: auto;
 }
 
+#four{
+	float: right;
+	overflow: auto;
+}
 #bottom-container{
 	bottom: 3px;
 

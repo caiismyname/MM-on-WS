@@ -54,35 +54,46 @@ function handleAuthClick(event) {
 
 function makeApiCall(){
 	gapi.client.load('calendar', 'v3').then(function(){
-		var eventList = [];
 		var minTime = moment().format();
 		var calListRequest = gapi.client.calendar.calendarList.list();
-		calListRequest.execute(function(resp){
-			for (i = 0; i <= resp.items.length ;i++){
-				var calendarInstance = resp.items[i];
-				var calEventRequest = gapi.client.calendar.events.list({
-					'calendarId': calendarInstance.id,
-					'singleEvents': true,
-					'orderBy': 'startTime',
-					'timeMin': minTime,
-					'maxResults': 10});
-				calEventRequest.execute(function(events){
-					for (x = 0; x < events.items.length; x++){
-						var item = events.items[x];
-						var name = item.summary;
-						var start = item.dateTime;
-						eventList.push(name);
-						};
-					for (y = 0; y < eventList.length ; y++){
-						$("#calendar").append(eventList[y]);
-						};
-	
-				});
-			};
+
+		parseCalendars(calListRequest);
+	});
+}
+
+function parseCalendars(calListRequest){
+	var allEvents = [];
+	var minTime = moment().format();
+	calListRequest.execute(function(resp){
+		resp.items.forEach(function(item){
+			var calEventRequest = gapi.client.calendar.events.list({
+				'calendarId': item.id,
+				'singleEvents': true,
+				'orderBy': 'startTime',
+				'timeMin': minTime,
+				'maxResults': 10,
+			});
+			var listOfEvents = parseEvents(calEventRequest);
+			// allEvents = allEvents.concat(parseEvents(calEventRequest));
+			// alert(allEvents.length);
 		});
 	});
-	alert("woo");
-};
+}
+
+function parseEvents(calEventRequest){
+	var localEventList = [];
+	calEventRequest.execute(function(events){
+		events.items.forEach(function(item){
+			var name = item.summary;
+			var start = item.dateTime;
+			localEventList.push(name);
+			$("#calendar").append(localEventList.length);		
+		});
+	});
+	
+}
+
+	
 
 
 $(document).ready(function(){
