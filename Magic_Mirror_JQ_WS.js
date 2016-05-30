@@ -29,7 +29,6 @@ var scopes = 'https://www.googleapis.com/auth/calendar';
 function handleClientLoad() {
   gapi.client.setApiKey(apiKey);
   window.setTimeout(checkAuth,1);
-
 }
 
 function checkAuth() {
@@ -53,19 +52,27 @@ function handleAuthClick(event) {
 }
 
 function makeApiCall(){
+	var allEvents = new Array(); 
+	var counter = 0;
 	gapi.client.load('calendar', 'v3').then(function(){
 		var minTime = moment().format();
 		var calListRequest = gapi.client.calendar.calendarList.list();
 
-		parseCalendars(calListRequest);
+		parseCalendars(calListRequest, function(masterEvents, totalCalendarCount){
+			allEvents = allEvents.concat(masterEvents);
+			counter += 1;
+			if (counter == totalCalendarCount){
+				sortEvents(allEvents);
+			};
+		});
 	});
 }
 
-function parseCalendars(calListRequest){
-	var allEvents = [];
+function parseCalendars(calListRequest, callback){
 	var minTime = moment().format();
 	calListRequest.execute(function(resp){
-		resp.items.forEach(function(item){
+		for(x = 0; x < resp.items.length; x++){
+			var item = resp.items[x];
 			var calEventRequest = gapi.client.calendar.events.list({
 				'calendarId': item.id,
 				'singleEvents': true,
@@ -73,28 +80,32 @@ function parseCalendars(calListRequest){
 				'timeMin': minTime,
 				'maxResults': 10,
 			});
-			var listOfEvents = parseEvents(calEventRequest);
-			// allEvents = allEvents.concat(parseEvents(calEventRequest));
-			// alert(allEvents.length);
-		});
+			
+			parseEvents(calEventRequest, function(eventList){
+				callback(eventList, resp.items.length);
+			});
+		};
 	});
 }
 
-function parseEvents(calEventRequest){
-	var localEventList = [];
+function parseEvents(calEventRequest, callback){
+	var localEventList = new Array();
+
 	calEventRequest.execute(function(events){
-		events.items.forEach(function(item){
+		for(i = 0; i < events.items.length; i++){
+			var item = events.items[i];
 			var name = item.summary;
 			var start = item.dateTime;
 			localEventList.push(name);
-			$("#calendar").append(localEventList.length);		
-		});
-	});
-	
+		};
+		callback(localEventList);
+	});	
 }
 
-	
-
+function sortEvents(eventList){
+	console.log("This is sortEvents");
+	console.log(eventList);
+}
 
 $(document).ready(function(){
 	updateMoment();
