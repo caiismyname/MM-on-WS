@@ -110,12 +110,12 @@ function sortEvents(eventList){
 	var allDayEvents = new Array();
 	var timedEvents = new Array(); // AKA non-all day events. IDK what to call them.
 	
-	for(i = 0; i < eventList.length; i++){
-		if(typeof eventList[i].start.dateTime != "string"){
-			allDayEvents.push(eventList[i]);
+	for(j = 0; j < eventList.length; j++){
+		if(typeof eventList[j].start.dateTime != "string"){
+			allDayEvents.push(eventList[j]);
 		}
 		else{
-			timedEvents.push(eventList[i]);
+			timedEvents.push(eventList[j]);
 		}
 	}
 
@@ -123,17 +123,20 @@ function sortEvents(eventList){
 	for(i = 0; i < timedEvents.length; i++){
 		var item = timedEvents[i];
 		var startTime = item.start.dateTime;
+
 		// sortedList is currently empty.
 		if(sortedList.length == 0){
 			sortedList.push(item);
-		} else if(sortedList.length == 1){
+		} 
+		else if(sortedList.length == 1){
 			if(startTime >= sortedList[0].start.dateTime){
 				sortedList.push(item);
 			}
 			else{
 				sortedList.unshift(item);
 			}
-		} else{
+		} 
+		else{
 			var counter = 0;
 			while(counter <= sortedList.length){
 				if(startTime >= sortedList[counter].start.dateTime && counter != sortedList.length - 1){
@@ -146,23 +149,19 @@ function sortEvents(eventList){
 					else{
 						sortedList.splice(counter, 0, item);
 					}
-					counter = counter + timedEvents.length;
+					counter = counter + 1000;
 				}
 				else{
 					sortedList.splice(counter, 0, item);
-					counter = counter + timedEvents.length; // ensures while loop breaks
+					counter = counter + 1000; // ensures while loop breaks
 				}
 			}
 		};  
-		for(i = 0; i < sortedList.length; i++){
-			console.log(sortedList[i].summary);
-		}
-		console.log("----------------------------------------");
 	}
 
-	// for(i = 0; i < sortedList.length; i++){
-	// 	console.log(sortedList[i].summary);
-	// }
+	for(i = 0; i < sortedList.length; i++){
+		console.log(sortedList[i].summary);
+	}
 }
 
 $(document).ready(function(){
