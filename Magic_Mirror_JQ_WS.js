@@ -107,19 +107,66 @@ function sortEvents(eventList){
 	}
 	console.log("------------------------------------------");
 	var sortedList = new Array();
-	var allDayEvents = new Array();
+	var rawAllDayEvents = new Array();
+	var sortedAllDayEvents = new Array();
 	var timedEvents = new Array(); // AKA non-all day events. IDK what to call them.
 	
+	// Seperating all day and non-all day events
 	for(j = 0; j < eventList.length; j++){
 		if(typeof eventList[j].start.dateTime != "string"){
-			allDayEvents.push(eventList[j]);
+			rawAllDayEvents.push(eventList[j]);
 		}
 		else{
 			timedEvents.push(eventList[j]);
 		}
 	}
 
-	// Add timed events first, then unshift the all day events to the beginning afterwards. 
+	// Sorting the all day events 
+	// This isn't necesary if I only display one day, but it will be if I want a future view
+	for(i = 0; i < rawAllDayEvents.length; i++){
+		var item = rawAllDayEvents[i];
+		var start = item.start.date;
+
+		if(sortedAllDayEvents.length == 0){
+			sortedAllDayEvents.push(item)
+		}
+		else if(sortedAllDayEvents.length == 1){
+			if(start >= sortedAllDayEvents[0].start.date){
+				sortedAllDayEvents.push(item);
+			}
+			else{
+				sortedAllDayEvents.unshift(item);
+			}
+		}
+		else{
+			var counter = 0;
+			while(counter <= sortedAllDayEvents.length){
+				if(start >= sortedAllDayEvents[counter].start.date && counter != sortedAllDayEvents.length - 1){
+					counter++;
+				}
+				else if(counter == sortedAllDayEvents.length - 1){
+					if(start >= sortedAllDayEvents[counter].start.date){
+						sortedAllDayEvents.push(item);
+					}
+					else{
+						sortedAllDayEvents.splice(counter, 0, item);
+					}
+					counter = counter + 1000; //ensures while loop breaks
+				}
+				else{
+					sortedAllDayEvents.splice(counter, 0, item);
+					counter = counter + 1000;
+				}
+			}
+		}
+	}
+
+	// console logging the all day events
+	for(i = 0; i < sortedAllDayEvents.length; i++){
+		console.log("ALL DAY " + sortedAllDayEvents[i].summary);
+	}
+
+	// Add timed events to sortedList, and sorting as you go
 	for(i = 0; i < timedEvents.length; i++){
 		var item = timedEvents[i];
 		var startTime = item.start.dateTime;
@@ -140,7 +187,7 @@ function sortEvents(eventList){
 			var counter = 0;
 			while(counter <= sortedList.length){
 				if(startTime >= sortedList[counter].start.dateTime && counter != sortedList.length - 1){
-					counter++
+					counter++;
 				}
 				else if(counter == sortedList.length - 1){
 					if(startTime >= sortedList[counter].start.dateTime){
@@ -149,16 +196,17 @@ function sortEvents(eventList){
 					else{
 						sortedList.splice(counter, 0, item);
 					}
-					counter = counter + 1000;
+					counter = counter + 1000;// ensures while loop breaks
 				}
 				else{
 					sortedList.splice(counter, 0, item);
-					counter = counter + 1000; // ensures while loop breaks
+					counter = counter + 1000; 
 				}
 			}
 		};  
 	}
 
+	// console logging the timed events
 	for(i = 0; i < sortedList.length; i++){
 		console.log(sortedList[i].summary);
 	}
