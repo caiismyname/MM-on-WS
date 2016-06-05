@@ -126,19 +126,34 @@ function sortEvents(eventList){
 		// sortedList is currently empty.
 		if(sortedList.length == 0){
 			sortedList.push(item);
-		}
-		else{
+		} else if(sortedList.length == 1){
+			if(startTime >= sortedList[0].start.dateTime){
+				sortedList.push(item);
+			}
+			else{
+				sortedList.unshift(item);
+			}
+		} else{
 			var counter = 0;
 			while(counter <= sortedList.length){
 				if(startTime >= sortedList[counter].start.dateTime && counter != sortedList.length - 1){
-					counter++;
+					counter++
+				}
+				else if(counter == sortedList.length - 1){
+					if(startTime >= sortedList[counter].start.dateTime){
+						sortedList.push(item);
+					}
+					else{
+						sortedList.splice(counter, 0, item);
+					}
+					counter = counter + timedEvents.length;
 				}
 				else{
 					sortedList.splice(counter, 0, item);
 					counter = counter + timedEvents.length; // ensures while loop breaks
 				}
 			}
-		}
+		};  
 		for(i = 0; i < sortedList.length; i++){
 			console.log(sortedList[i].summary);
 		}
