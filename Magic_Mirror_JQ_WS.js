@@ -62,7 +62,7 @@ function makeApiCall(){
 			allEvents = allEvents.concat(masterEvents);
 			counter += 1;
 			if (counter == totalCalendarCount){
-				sortEvents(allEvents);
+				sortEvents(allEvents, calendarFrontEnd);
 			};
 		});
 	});
@@ -100,16 +100,20 @@ function parseEvents(calEventRequest, callback){
 	});	
 }
 
-function sortEvents(eventList){
-	console.log("This is sortEvents");
-	for(i = 0; i < eventList.length; i++){
-		console.log(eventList[i].summary);
-	}
-	console.log("------------------------------------------");
-	var sortedList = new Array();
+function sortEvents(eventList, callback){
+	// This function deals with events in their object form
+
+
+	// console.log("This is sortEvents");
+	// for(i = 0; i < eventList.length; i++){
+	// 	console.log(eventList[i].summary);
+	// }
+	// console.log("------------------------------------------");
+
+	var timedEvents = new Array(); // AKA non-all day events. IDK what to call them.
+	var sortedList = new Array(); // This array will hold (only) the timed events, sorted
 	var rawAllDayEvents = new Array();
 	var sortedAllDayEvents = new Array();
-	var timedEvents = new Array(); // AKA non-all day events. IDK what to call them.
 	
 	// Seperating all day and non-all day events
 	for(j = 0; j < eventList.length; j++){
@@ -161,11 +165,6 @@ function sortEvents(eventList){
 		}
 	}
 
-	// console logging the all day events
-	for(i = 0; i < sortedAllDayEvents.length; i++){
-		console.log("ALL DAY " + sortedAllDayEvents[i].summary);
-	}
-
 	// Add timed events to sortedList, and sorting as you go
 	for(i = 0; i < timedEvents.length; i++){
 		var item = timedEvents[i];
@@ -206,10 +205,87 @@ function sortEvents(eventList){
 		};  
 	}
 
-	// console logging the timed events
-	for(i = 0; i < sortedList.length; i++){
-		console.log(sortedList[i].summary);
+
+	// // console logging the all day events
+	// for(i = 0; i < sortedAllDayEvents.length; i++){
+	// 	console.log("ALL DAY " + sortedAllDayEvents[i].summary);
+	// }
+
+	// console.log("----------------------------------")
+
+	// // console logging the timed events
+	// for(i = 0; i < sortedList.length; i++){
+	// 	console.log(sortedList[i].summary);
+	// }
+
+	callback(sortedAllDayEvents, sortedList);
+}
+
+function calendarFrontEnd(allDayEvents, timedEvents){
+	// These will hold the events corresponding to each day
+	var todayEvents = new Array();
+	var plusOneEvents = new Array();
+	var plusTwoEvents = new Array();
+	var plusThreeEvents = new Array();
+	var plusFourEvents = new Array();
+
+	var today = moment().format("YYYY-MM-DD");
+	var plusOne = moment().add(1, 'd').format("YYYY-MM-DD");
+	var plusTwo = moment().add(2, 'd').format("YYYY-MM-DD");
+	var plusThree = moment().add(3, 'd').format("YYYY-MM-DD");
+	var plusFour = moment().add(4, 'd').format("YYYY-MM-DD");
+
+	// Pushing all-day events first, into the corresponding day array
+	for(i = 0; i < allDayEvents.length; i++){
+		
+		var item = allDayEvents[i];
+		var start = item.start.date;
+		
+		if(start == today){
+			todayEvents.push(item);
+		}
+		else if(start == plusOne){
+			plusOneEvents.push(item);
+		}
+		else if(start == plusTwo){
+			plusTwoEvents.push(item);
+		}
+		else if(start == plusThree){
+			plusThreeEvents.push(item);
+		}
+		else if(start == plusFour){
+			plusFourEvents.push(item);
+		}
 	}
+
+	// Pushing timed events to the corresponding day array
+	for(i = 0; i < timedEvents.length; i++){
+		
+		var item = timedEvents[i];
+		var start = item.start.dateTime;
+		start = start.slice(0,10);
+		
+		if(start == today){
+			todayEvents.push(item);
+		}
+		else if(start == plusOne){
+			plusOneEvents.push(item);
+		}
+		else if(start == plusTwo){
+			plusTwoEvents.push(item);
+		}
+		else if(start == plusThree){
+			plusThreeEvents.push(item);
+		}
+		else if(start == plusFour){
+			plusFourEvents.push(item);
+		}
+	}
+
+	for(i = 0; i< plusFourEvents.length; i++){
+		console.log(plusFourEvents[i].summary + " ")
+	}
+
 }
 
 $(document).ready(function(){
