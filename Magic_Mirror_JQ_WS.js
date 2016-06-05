@@ -94,9 +94,7 @@ function parseEvents(calEventRequest, callback){
 	calEventRequest.execute(function(events){
 		for(i = 0; i < events.items.length; i++){
 			var item = events.items[i];
-			var name = item.summary;
-			var start = item.dateTime;
-			localEventList.push(name);
+			localEventList.push(item);
 		};
 		callback(localEventList);
 	});	
@@ -104,7 +102,52 @@ function parseEvents(calEventRequest, callback){
 
 function sortEvents(eventList){
 	console.log("This is sortEvents");
-	console.log(eventList);
+	for(i = 0; i < eventList.length; i++){
+		console.log(eventList[i].summary);
+	}
+	console.log("------------------------------------------");
+	var sortedList = new Array();
+	var allDayEvents = new Array();
+	var timedEvents = new Array(); // AKA non-all day events. IDK what to call them.
+	
+	for(i = 0; i < eventList.length; i++){
+		if(typeof eventList[i].start.dateTime != "string"){
+			allDayEvents.push(eventList[i]);
+		}
+		else{
+			timedEvents.push(eventList[i]);
+		}
+	}
+
+	// Add timed events first, then unshift the all day events to the beginning afterwards. 
+	for(i = 0; i < timedEvents.length; i++){
+		var item = timedEvents[i];
+		var startTime = item.start.dateTime;
+		// sortedList is currently empty.
+		if(sortedList.length == 0){
+			sortedList.push(item);
+		}
+		else{
+			var counter = 0;
+			while(counter <= sortedList.length){
+				if(startTime >= sortedList[counter].start.dateTime && counter != sortedList.length - 1){
+					counter++;
+				}
+				else{
+					sortedList.splice(counter, 0, item);
+					counter = counter + timedEvents.length; // ensures while loop breaks
+				}
+			}
+		}
+		for(i = 0; i < sortedList.length; i++){
+			console.log(sortedList[i].summary);
+		}
+		console.log("----------------------------------------");
+	}
+
+	// for(i = 0; i < sortedList.length; i++){
+	// 	console.log(sortedList[i].summary);
+	// }
 }
 
 $(document).ready(function(){
