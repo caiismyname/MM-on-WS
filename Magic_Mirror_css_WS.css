@@ -23,7 +23,6 @@ body {
 
 #clock {
 	float: left;
-	line-height: ;
 }
 
 
@@ -34,13 +33,19 @@ body {
 #calendar{
 	float: left;
 	overflow: auto;
+	width: auto;
 }
 
-#four{
-	float: right;
-	overflow: auto;
-}
+
 #bottom-container{
 	bottom: 3px;
+}
+
+table, th, td{
+	text-align: left;
+	border-right: 2px solid black;
+	border-collapse: collapse;
+	padding: 0px 7px;
+	width: auto;
 
 }

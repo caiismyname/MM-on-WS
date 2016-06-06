@@ -2,7 +2,7 @@
 function updateMoment(){
 	var now = moment();
 	$("#time").html(now.format('h:mm:ss a'));
-	$("#date").html(now.format('dddd' + ", " + 'MMM Do'));
+	$("#date").html(now.format('dddd' + ", " + 'MMMM Do'));
 }
 
 function updateWeather(){
@@ -282,10 +282,75 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 		}
 	}
 
-	for(i = 0; i< plusFourEvents.length; i++){
-		console.log(plusFourEvents[i].summary + " ")
+	// Following code will be for pushing to html interface.
+	//
+	//
+	//
+	//
+	//
+
+	// Declaring future dates, but in terms of their day-of-week names now. 
+	var todayName = moment().format("dddd, MMMM Do");
+	var plusOneName = moment().add(1, 'd').format("dddd, MMMM Do");
+	var plusTwoName = moment().add(2, 'd').format("dddd, MMMM Do");
+	var plusThreeName = moment().add(3, 'd').format("dddd, MMMM Do");
+	var plusFourName = moment().add(4, 'd').format("dddd, MMMM Do");
+
+	// Replacing header names
+	$("#today-header").html(todayName);
+	$("#plusOne-header").html(plusOneName);
+	$("#plusTwo-header").html(plusTwoName);
+	$("#plusThree-header").html(plusThreeName);
+	$("#plusFour-header").html(plusFourName);
+
+	// If no events that day, say "No events". 
+	if(todayEvents.length == 0){
+		$("#today-events").html("No Events");
+	}
+	if(plusOneEvents.length == 0){
+		$("#plusOne-events").html("No Events");
+	}
+	if(plusTwoEvents.length == 0){
+		$("#plusTwo-events").html("No Events");
+	}	
+	if(plusThreeEvents.length == 0){
+		$("#plusThree-events").html("No Events");
+	}
+	if(plusFourEvents.length == 0){
+		$("#plusFour-events").html("No Events");
 	}
 
+	// Add events from corresponding event arrays to the html
+	for(i = 0; i < todayEvents.length; i++){
+		item = todayEvents[i];
+		// passing the google event start time as a dateTime string to moment, then formatting
+		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		$("#today-events").append(item.summary  + "  " + start + "<br>");
+	}
+	for(i = 0; i < plusOneEvents.length; i++){
+		item = plusOneEvents[i];
+		// passing the google event start time as a dateTime string to moment, then formatting
+		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		$("#plusOne-events").append(item.summary  + "  " + start + "<br>");
+	}
+	for(i = 0; i < plusTwoEvents.length; i++){
+		item = plusTwoEvents[i];
+		// passing the google event start time as a dateTime string to moment, then formatting
+		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		$("#plusTwo-events").append(item.summary  + "  " + start + "<br>");
+	}
+	for(i = 0; i < plusThreeEvents.length; i++){
+		item = plusThreeEvents[i];
+		// passing the google event start time as a dateTime string to moment, then formatting
+		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		$("#plusThree-events").append(item.summary  + "  " + start + "<br>");
+	}
+	for(i = 0; i < plusFourEvents.length; i++){
+		item = plusFourEvents[i];
+		// passing the google event start time as a dateTime string to moment, then formatting
+		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		$("#plusFour-events").append(item.summary  + "  " + start + "<br>");
+	}
 }
 
 $(document).ready(function(){
