@@ -15,7 +15,7 @@ body {
 }
 
 .info-element{
-	width: 35%;
+	width: 15%;
 	height: 100%;
 	background-color: yellow;
 	text-align: center;
@@ -25,14 +25,9 @@ body {
 	float: left;
 }
 
-
-#weather{
-	float: right;
-}
-
 #calendar{
-	float: left;
-	overflow: auto;
+	float: right;
+	height: auto;
 	width: auto;
 }
 
@@ -43,6 +38,7 @@ body {
 
 table, th, td{
 	text-align: left;
+	vertical-align: top;
 	border-right: 2px solid black;
 	border-collapse: collapse;
 	padding: 0px 7px;
