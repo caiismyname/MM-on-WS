@@ -9,7 +9,6 @@ var clientId = '840122434097-gb87cdf08fupi69b262066jl68f9q1a4.apps.googleusercon
 var apiKey = 'AIzaSyDgUKhpF1UNxiTbGU-bS1FRPwyksg5M3I0';
 var scopes = 'https://www.googleapis.com/auth/calendar';
 
-
 function handleClientLoad() {
   gapi.client.setApiKey(apiKey);
   window.setTimeout(checkAuth,1);
@@ -274,11 +273,11 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 	//
 
 	// Declaring future dates, but in terms of their day-of-week names now. 
-	var todayName = moment().format("dddd, MMMM Do");
-	var plusOneName = moment().add(1, 'd').format("dddd, MMMM Do");
-	var plusTwoName = moment().add(2, 'd').format("dddd, MMMM Do");
-	var plusThreeName = moment().add(3, 'd').format("dddd, MMMM Do");
-	var plusFourName = moment().add(4, 'd').format("dddd, MMMM Do");
+	var todayName = moment().format("dddd, Do");
+	var plusOneName = moment().add(1, 'd').format("dddd, Do");
+	var plusTwoName = moment().add(2, 'd').format("dddd, Do");
+	var plusThreeName = moment().add(3, 'd').format("dddd, Do");
+	var plusFourName = moment().add(4, 'd').format("dddd, Do");
 
 	// Replacing header names
 	$("#today-header").html(todayName);
@@ -286,6 +285,14 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 	$("#plusTwo-header").html(plusTwoName);
 	$("#plusThree-header").html(plusThreeName);
 	$("#plusFour-header").html(plusFourName);
+
+	// Clearing the current event boxes
+	// Note, headers don't need to be cleared b/c the header names sets it as .html() (see above)
+	$("#today-events").html(" ");
+	$("#plusOne-events").html(" ");
+	$("#plusTwo-events").html(" ");	
+	$("#plusThree-events").html(" ");
+	$("#plusFour-events").html(" ");
 
 	// If no events that day, say "No events". 
 	if(todayEvents.length == 0){
@@ -341,7 +348,7 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 		$("#plusFour-events").append(item.summary  + "  " + start + "<br>");
 	}
 
-	// Adding weather info to the table headers
+	//Adding weather info to the table headers
 	var apiKey = 'bd0e23dbeb0c1b833c00b4b45d4fa188';
 	$.getJSON('http://api.openweathermap.org/data/2.5/forecast/daily?q=Tucson&mode=JSON&units=imperial&cnt=5&APPID=' + apiKey, function(weatherForecast){
 	// For the description, the access path differs from the given path on their site. You must add
@@ -354,13 +361,13 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 	});
 }
 
+
 $(document).ready(function(){
 	updateMoment();
 	setInterval(updateMoment, 1000);
 
-	handleClientLoad();
-
-	setInterval(makeApiCall, 600000);
+	setInterval(handleClientLoad, 600000);
+	
 
 })
 

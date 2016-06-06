@@ -6,7 +6,7 @@ body {
 }
 
 .horizontal-container {
-	background-color: green;
+	/*background-color: green;*/
 	width: calc(100vw - 20px);
 	height: 20vh;
 	margin: 0px;
@@ -17,7 +17,7 @@ body {
 .info-element{
 	width: 15%;
 	height: 100%;
-	background-color: yellow;
+	/*background-color: yellow;*/
 	text-align: center;
 }
 
@@ -31,7 +31,10 @@ body {
 	width: auto;
 }
 
-
+#top-container{
+	padding-top: 20px;
+	padding-right: 10px;
+}
 #bottom-container{
 	bottom: 3px;
 }
