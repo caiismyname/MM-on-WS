@@ -325,30 +325,35 @@ function calendarFrontEnd(allDayEvents, timedEvents){
 		item = todayEvents[i];
 		// passing the google event start time as a dateTime string to moment, then formatting
 		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		if(start == "Invalid date"){start = " ";}
 		$("#today-events").append(item.summary  + "  " + start + "<br>");
 	}
 	for(i = 0; i < plusOneEvents.length; i++){
 		item = plusOneEvents[i];
 		// passing the google event start time as a dateTime string to moment, then formatting
 		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		if(start == "Invalid date"){start = " ";}
 		$("#plusOne-events").append(item.summary  + "  " + start + "<br>");
 	}
 	for(i = 0; i < plusTwoEvents.length; i++){
 		item = plusTwoEvents[i];
 		// passing the google event start time as a dateTime string to moment, then formatting
 		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		if(start == "Invalid date"){start = " ";}
 		$("#plusTwo-events").append(item.summary  + "  " + start + "<br>");
 	}
 	for(i = 0; i < plusThreeEvents.length; i++){
 		item = plusThreeEvents[i];
 		// passing the google event start time as a dateTime string to moment, then formatting
 		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		if(start == "Invalid date"){start = " ";}
 		$("#plusThree-events").append(item.summary  + "  " + start + "<br>");
 	}
 	for(i = 0; i < plusFourEvents.length; i++){
 		item = plusFourEvents[i];
 		// passing the google event start time as a dateTime string to moment, then formatting
 		var start = moment(item.start.dateTime, moment.ISO_8601).format("h:mm A");
+		if(start == "Invalid date"){start = " ";}
 		$("#plusFour-events").append(item.summary  + "  " + start + "<br>");
 	}
 }

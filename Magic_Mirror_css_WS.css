@@ -49,3 +49,7 @@ table, th, td{
 	width: auto;
 
 }
+
+table, #plusFour-header, #plusFour-events{
+	border-right: none;
+}
